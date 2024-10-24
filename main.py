@@ -5,8 +5,31 @@ import json
 class QMKLayoutViewer:
     def __init__(self, layout_file):
         self.root = tk.Tk()
+        self.root.overrideredirect(True)
         self.root.title("QMK Layout Viewer")
         
+        # Create title bar frame
+        title_bar = tk.Frame(self.root, bg='black', height=20)
+        title_bar.pack(fill='x', side='top')
+        
+        # Add close button
+        close_button = tk.Label(
+            title_bar, 
+            text='✕', 
+            bg='black', 
+            fg='white', 
+            padx=10
+        )
+        close_button.pack(side='right')
+        close_button.bind('<Button-1>', lambda e: self.root.quit())
+        
+        # Bind Ctrl+Esc to close
+        self.root.bind('<Control-Escape>', lambda e: self.root.quit())
+        
+        # Make title bar draggable
+        title_bar.bind('<Button-1>', self.start_drag)
+        title_bar.bind('<B1-Motion>', self.drag)
+
         # Make window stay on top with partial transparency
         self.root.attributes('-topmost', True, '-alpha', 0.8)
         self.root.configure(bg='black')
